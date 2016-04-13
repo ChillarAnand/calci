@@ -1,0 +1,54 @@
+{% load static swampdragon_tags %}
+{% load bootstrap3 %}
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="row col-sm-5">
+                <h1>Real time calculations</h1>
+
+                <form method="POST" action="." role="form">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <strong>Invalid expression. Please enter valid expression</strong>
+                    {% endif %}
+                    <br/>
+
+                    {% bootstrap_form form %}
+
+                    {% buttons %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            Calculate
+                        </button>
+                    </div>
+                {% endbuttons %}
+
+                </form>
+
+                <ul id="notifications">
+                    {% for calculation in calculations %}
+                        <li>{{ calculation.expression }} = {{ calculation.result }}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+            <!-- SwampDragon -->
+            {% swampdragon_settings %}
+            <script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
+
+            <!-- notifications -->
+            <script type="text/javascript" src="{{ STATIC_URL }}notifications.js"></script>
+
+        </div>
+    </body>
+</html>
